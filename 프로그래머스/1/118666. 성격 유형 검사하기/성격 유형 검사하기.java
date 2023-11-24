@@ -1,25 +1,27 @@
 import java.util.*;
 class Solution {
-    public String solution(String[] survey, int[] choices) {
+    public String solution(String[] survey, int[] choices){
         Map<Character, Integer> map = new HashMap<>();
-        
-        for(int i=0; i<survey.length; i++){
-            int choice = choices[i];
-            if(choice > 0 && choice < 4){
-                char ch = survey[i].charAt(0);
-                map.put(ch, map.getOrDefault(ch, 0) + 4 - choice);
+
+        for(int i=0; i<choices.length; i++){
+
+            if(choices[i] > 4){
+                char type = survey[i].charAt(1);
+                map.put(type, map.getOrDefault(type,0) + choices[i] - 4);
             }
-            else if(choice > 4) {
-                char ch = survey[i].charAt(1);
-                map.put(ch, map.getOrDefault(ch, 0) + choice - 4);
+            else {
+                char type = survey[i].charAt(0);
+                map.put(type, map.getOrDefault(type, 0)+ 4 - choices[i]);
             }
         }
-        
-        return new StringBuilder()
-            .append(map.getOrDefault('R', 0) >= map.getOrDefault('T', 0) ? 'R' : 'T')
-            .append(map.getOrDefault('C', 0) >= map.getOrDefault('F', 0) ? 'C' : 'F')
-            .append(map.getOrDefault('J', 0) >= map.getOrDefault('M', 0) ? 'J' : 'M')
-            .append(map.getOrDefault('A', 0) >= map.getOrDefault('N', 0) ? 'A' : 'N')
-            .toString();
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(map.getOrDefault('R',0) >= map.getOrDefault('T', 0) ? "R" : "T");
+        sb.append(map.getOrDefault('C',0) >= map.getOrDefault('F', 0) ? "C" : "F");
+        sb.append(map.getOrDefault('J',0) >= map.getOrDefault('M', 0) ? "J" : "M");
+        sb.append(map.getOrDefault('A',0) >= map.getOrDefault('N', 0) ? "A" : "N");
+
+        return sb.toString();
     }
 }
