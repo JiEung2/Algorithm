@@ -1,33 +1,29 @@
-def check(arr):
-    
-    for i in range(9):
-        row_check = [0]*10
-        col_check = [0]*10
-        for j in range(9):
-            row = arr[i][j]
-            col = arr[j][i]
+def check_sudoku(arr):
 
-            if row_check[row]:
+    for i in range(9):
+        row = [0] * 10
+        col = [0] * 10
+        for j in range(9):
+            if row[arr[i][j]] or col[arr[j][i]]:
                 return 0
-            if col_check[col]:
-                return 0
-            
-            row_check[row] = 1
-            col_check[col] = 1
+            row[arr[i][j]] = 1
+            col[arr[j][i]] = 1
 
             if i % 3 == 0 and j % 3 == 0:
-                square_check = [0]*10
-                for x in range(i, i+3):
-                    for y in range(j, j+3):
-                        if square_check[arr[x][y]]:
+                square = [0] * 10
+                for k in range(3):
+                    for z in range(3):
+                        if square[arr[i+k][j+z]]:
                             return 0
-                        
-                        square_check[arr[x][y]] = 1
-    
+                        square[arr[i+k][j+z]] = 1
+
     return 1
 
-n = int(input())
-for tc in range(1, n+1):
-    arr = [list(map(int, input().split())) for _ in range(9)]
-    result = check(arr)
-    print('#{} {}'.format(tc, result))
+
+T = int(input())
+
+for tc in range(T):
+    sudoku = [list(map(int, input().split())) for _ in range(9)]
+    result = check_sudoku(sudoku)
+
+    print(f'#{tc+1} {result}')
