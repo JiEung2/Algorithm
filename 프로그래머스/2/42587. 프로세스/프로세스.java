@@ -2,24 +2,29 @@ import java.util.*;
 class Solution {
     public int solution(int[] priorities, int location) {
         int answer = 0;
-        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
+        PriorityQueue<Integer> pq = new PriorityQueue<>((m1,m2)->m2 - m1);
+        Queue<int[]> q = new LinkedList<>();
         
-        for(int x : priorities){
-            pq.add(x);
+        for(int i = 0; i < priorities.length; i++){
+            pq.add(priorities[i]);
+            q.add(new int[] {i, priorities[i]});
         }
         
-        while(!pq.isEmpty()){
-            for(int i=0; i<priorities.length; i++){
-                if(pq.peek() == priorities[i]){
-                    if (i == location) {
-                        answer++;
-                        return answer;
-                    }   
-                    pq.poll();
-                    answer++;
+        int count = 1;
+        int now = pq.poll();
+        while(!q.isEmpty()) {
+            int[] tmp = q.poll();
+            if(tmp[1] == now) {
+                if(tmp[0] == location) {
+                    answer = count;
+                    break;
                 }
+                now = pq.poll();
+                count++;
             }
+            q.add(tmp);
         }
+        
         
         return answer;
     }
