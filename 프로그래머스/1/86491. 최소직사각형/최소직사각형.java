@@ -1,22 +1,22 @@
 import java.util.*;
 class Solution {
     public int solution(int[][] sizes) {
-        int answer = 0;
-        PriorityQueue<Integer> pQ = new PriorityQueue<>(Collections.reverseOrder());
-        PriorityQueue<Integer> pQ2 = new PriorityQueue<>(Collections.reverseOrder());
+        int maxResult = 0, minResult = 0;
         
-        for(int i=0; i<sizes.length; i++){
-            if(sizes[i][0] > sizes[i][1]){
-                pQ.add(sizes[i][0]);
-                pQ2.add(sizes[i][1]);
+        for(int i = 0; i < sizes.length; i++) {
+            int max = 0, min = 0;
+            
+            if(sizes[i][0] > sizes[i][1]) {
+                max = sizes[i][0];
+                min = sizes[i][1];
+            } else{
+                max = sizes[i][1];
+                min = sizes[i][0];
             }
-            else{
-                pQ.add(sizes[i][1]);
-                pQ2.add(sizes[i][0]);
-            }
+            
+            maxResult = Math.max(maxResult, max);
+            minResult = Math.max(minResult, min);
         }
-        
-        answer = pQ.peek() * pQ2.peek();
-        return answer;
+        return maxResult * minResult;
     }
 }
