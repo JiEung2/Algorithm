@@ -1,46 +1,46 @@
 import java.util.*;
 class Solution {
-    boolean check[] = new boolean[7];
-    List<Integer> list = new ArrayList<>();
+    Set<Integer> set;
+    int[] check = new int[7];
     public int solution(String numbers) {
         int answer = 0;
-
-        for(int i=0; i<numbers.length(); i++){
-            DFS(i+1, numbers, "");
-        }
-        for(int i=0; i<list.size(); i++) {
-            System.out.println(list.get(i));
-        }
-
-        for(int i=0; i<list.size(); i++){
-            if(prime(list.get(i))) answer++;
-        }
-
-        return answer;
-    }
-    public void DFS(int L, String numbers, String tmp){
-        if(tmp.length() == L){
-            int temp = Integer.parseInt(tmp);
-            if(!list.contains(temp)) list.add(temp);
-            return;
-        }
-
-        for(int i=0; i<numbers.length(); i++){
-            if(!check[i]){
-                tmp += numbers.charAt(i);
-                check[i] = true;
-                DFS(L, numbers, tmp);
-                check[i] = false;
-                tmp = tmp.substring(0, tmp.length()-1);
+        set = new HashSet<>();
+        
+        dfs(numbers, "", 0);
+        
+        for (Integer num : set) {
+            if (isPrime(num)) {
+                answer++;
             }
         }
-        return;
+        return answer;
+        
     }
-    public boolean prime(int n){
-        if(n == 0 || n == 1) return false;
-        for(int i=2; i<n; i++){
-            if(n%i==0) return false;
+    
+    public void dfs(String numbers, String now, int depth) {
+        if (depth > numbers.length()) return;
+        
+        for (int i = 0; i < numbers.length(); i++) {
+            if(check[i] == 0) {
+                check[i] = 1;
+                set.add(Integer.parseInt(now + numbers.charAt(i)));
+                dfs(numbers ,now + numbers.charAt(i), depth + 1);
+                check[i] = 0;
+            }
         }
+    }
+    
+    public static boolean isPrime(int n) {
+        if (n < 2) {
+            return false;
+        }
+		
+        for (int i = 2; i <= (int) Math.sqrt(n); i++) {
+            if (n % i == 0) {
+                return false;
+            }
+        }
+ 
         return true;
     }
 }
