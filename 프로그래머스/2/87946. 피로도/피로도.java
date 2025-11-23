@@ -1,21 +1,30 @@
 class Solution {
-    boolean check[];
-    int cnt = 0;
+    int[] check;
+    int result;
     public int solution(int k, int[][] dungeons) {
-        check = new boolean[dungeons.length];
-        DFS(0, k, dungeons);
-        return cnt;
+        result = 0;
+        check = new int[dungeons.length];
+        for(int i = 0 ; i < dungeons.length; i++) {
+            dfs(i, k, 0, dungeons);
+        }
+        
+        return result;
     }
     
-    public void DFS(int L, int k, int[][] dungeons){
-        for(int i=0; i<dungeons.length; i++){
-            if(!check[i] && k >= dungeons[i][0]){
-                check[i] = true;
-                DFS(L+1, k-dungeons[i][1], dungeons);
-                check[i] = false;
+    public void dfs(int index, int now, int depth, int[][] dungeons){
+        
+        if(depth >= dungeons.length) {
+            result = Math.max(result, depth);
+            return;
+        }
+        
+        for(int i = 0; i < dungeons.length; i++) {
+            if(check[i] == 0 && now >= dungeons[i][0]) {
+                check[i] = 1;
+                dfs(i, now - dungeons[i][1], depth + 1, dungeons);
+                check[i] = 0;
             }
         }
-        cnt = Math.max(L, cnt);
-        
+        result = Math.max(result, depth);
     }
 }
