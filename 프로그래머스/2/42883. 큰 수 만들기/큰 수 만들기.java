@@ -1,23 +1,20 @@
 class Solution {
-    int num = 0;
-    boolean check[];
+
     public String solution(String number, int k) {
         StringBuilder sb = new StringBuilder();
-        String answer = "";
-        int index=0;
-        for(int i=0; i<number.length()-k; i++){
-            int max = 0;
-            for(int j=index; j <= k+i; j++){
-                if(max < number.charAt(j) - '0'){
-                    max = number.charAt(j) - '0';
-                    index = j+1;
-                    
-                }
+
+        for (char n : number.toCharArray()) {
+            while (sb.length() > 0 && k > 0 && sb.charAt(sb.length() - 1) < n) {
+                sb.setLength(sb.length() - 1);
+                k--;
             }
-            sb.append(max);
+
+            sb.append(n);
         }
-        
+
+        if (k > 0) sb.setLength(sb.length() - k);
+
         return sb.toString();
     }
-    
+
 }
