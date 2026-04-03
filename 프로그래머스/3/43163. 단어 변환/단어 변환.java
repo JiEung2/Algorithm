@@ -1,28 +1,43 @@
 class Solution {
     int result;
+    int[] check;
     public int solution(String begin, String target, String[] words) {
-        int[] check = new int[words.length];
         result = Integer.MAX_VALUE;
+        check = new int[words.length];
+        dfs(words, begin, 0, target);
         
-        dfs(words, begin, target, check, 0);
-    
-        if(result == Integer.MAX_VALUE) result = 0;
+        if(result == Integer.MAX_VALUE) return 0;
         return result;
     }
     
-    public void dfs(String[] words, String now, String target, int[] check, int sum) {
-        if(now.equals(target)) result = Math.min(result, sum);
+    public void dfs(String[] words, String now, int cnt, String target) {
+        // System.out.println("now = " + now);
+        if(now.equals(target)) {
+            result = Math.min(result, cnt);
+            return;
+        }
+        
         for(int i = 0; i < words.length; i++) {
-            int wrong = 0;
-            if(check[i] == 1) continue;
-            for(int j = 0; j < now.length(); j++) {
-                if(now.charAt(j) != words[i].charAt(j)) wrong++;
-            }
-            if(wrong == 1) {
+            if(check[i] == 0 && checkWords(words[i], now)) {
                 check[i] = 1;
-                dfs(words, words[i], target, check, sum + 1);
+                dfs(words, words[i], cnt + 1, target);
                 check[i] = 0;
             }
         }
+    }
+    
+    public boolean checkWords(String before, String next) {
+        int dif = 0;
+        // System.out.println("before = " + before);
+        // System.out.println("next = " + next);
+        for(int i = 0; i < before.length(); i++) {
+            // System.out.println("비교 = " + (before.charAt(i) == next.charAt(i)));
+            if(before.charAt(i) != next.charAt(i)) dif++;
+        }
+        
+        // System.out.println("dif = " + dif);
+        if(dif == 1) return true;
+        
+        return false;
     }
 }
