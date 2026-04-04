@@ -1,42 +1,40 @@
 import java.util.*;
 class Solution {
     public int solution(int distance, int[] rocks, int n) {
-        int answer = 0;
-        
-        Arrays.sort(rocks);
         int right = distance;
         int left = 0;
+        Arrays.sort(rocks);
         
-        while(left <= right) {
-            int mid = (right + left) / 2;    
-            int count = countRemovableRocks(mid, rocks, distance);
-            if(count <= n) {
-                answer = mid;
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            if(can(n, rocks, mid, distance)) {
                 left = mid + 1;
             } else{
                 right = mid - 1;
             }
         }
         
-        return answer;
+        return right;
     }
     
-    public int countRemovableRocks(int minDist, int[] rocks, int distance) {
-        int removeCount = 0;
-        int prevPos = 0;
+    public boolean can(int n, int[] rocks, int mid, int distance) {
+        int before = 0;
+        int result = 0;
         
-        for (int rock : rocks) {
-            if (rock - prevPos < minDist) {
-                removeCount++;
-            } else {
-                prevPos = rock;
+        for(int i = 0; i < rocks.length; i++) {
+            if(rocks[i] - before < mid) {
+                result++;
+            } else{
+                
+                before = rocks[i];
             }
+            
         }
         
-        if (distance - prevPos < minDist) {
-            removeCount++;
-        }
+        if(distance - before < mid) result++;
         
-        return removeCount;
+        if(result <= n) return true;
+        
+        return false;
     }
 }
