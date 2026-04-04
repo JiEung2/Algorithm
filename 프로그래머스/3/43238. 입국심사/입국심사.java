@@ -1,28 +1,26 @@
 import java.util.*;
 class Solution {
     public long solution(int n, int[] times) {
-        long answer = Long.MAX_VALUE;
-        
         Arrays.sort(times);
         
-        long start = times[0];
-        long end = (long)times[times.length - 1] * (long)n;
-        long mid = 0;
+        long right = (long)times[times.length - 1] * (long)n;
+        long left = times[0];
         
-        while (start <= end) {
-            mid = (start + end) / 2;
+        while (left <= right) {
+            long mid = (left + right) / 2;
             long sum = 0;
             for(int time : times) {
                 sum += mid / time;
             }
             
-            if (sum >= n) {
-                answer = Math.min(answer, mid);
-                end = mid - 1;
-            } else {
-                start = mid + 1;
+            if(sum >= n) {
+                right = mid - 1;
+            }
+            else {
+                left = mid + 1;
             }
         }
-        return answer;
+        
+        return right + 1;
     }
 }
