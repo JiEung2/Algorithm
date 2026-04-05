@@ -1,12 +1,10 @@
 import java.util.*;
 class Solution {
-    int[] dx = {0, 1};
-    int[] dy = {1, 0};
     public int solution(int m, int n, int[][] puddles) {
         int[][] dp = new int[n + 1][m + 1];
         
-        for(int[] puddle : puddles) {
-            dp[puddle[1]][puddle[0]] = -1;
+        for(int i = 0; i < puddles.length; i++) {
+            dp[puddles[i][1]][puddles[i][0]] = -1;
         }
         
         dp[1][1] = 1;
@@ -24,6 +22,8 @@ class Solution {
                 dp[i][j] %= 1_000_000_007;
             }
         }
-        return dp[n][m];
+    
+        return dp[n][m] % 1_000_000_007;
     }
+
 }
