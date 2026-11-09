@@ -1,53 +1,56 @@
 import java.util.*;
 class Solution {
-    int[][] arr;
-    int result;
     public int solution(int n, int[][] wires) {
-        int answer = n;
-        arr = new int [n + 1][n + 1];
-        
-        for(int i = 0; i < wires.length; i++) {
-            arr[wires[i][0]][wires[i][1]] = 1;
-            arr[wires[i][1]][wires[i][0]] = 1;
+        int answer = Integer.MAX_VALUE;
+        List<List<Integer>> list = new ArrayList<>();
+        for(int i = 0; i < n + 1; i++) {
+            list.add(new ArrayList<>());
         }
         
         for(int i = 0; i < wires.length; i++) {
-            arr[wires[i][0]][wires[i][1]] = 0;
-            arr[wires[i][1]][wires[i][0]] = 0;
+            int a = wires[i][0];
+            int b = wires[i][1];
             
-            answer = Math.min(answer, dfs(wires[i][0], arr, new int[n+1], n));
+            list.get(a).add(b);
+            list.get(b).add(a);
+        }
+        
+        for(int i = 0; i < wires.length; i++) {
+            int a = wires[i][0];
+            int b = wires[i][1];
             
-            arr[wires[i][0]][wires[i][1]] = 1;
-            arr[wires[i][1]][wires[i][0]] = 1;
+            list.get(a).remove(Integer.valueOf(b));
+            list.get(b).remove(Integer.valueOf(a));
+            
+            answer = Math.min(Math.abs(n - 2 * bfs(list, n)), answer);
+            
+            list.get(a).add(b);
+            list.get(b).add(a);
         }
         
         return answer;
     }
     
-    public int dfs(int start, int[][] arr, int[] check, int n) {
+    public int bfs(List<List<Integer>> list, int n) {
         Queue<Integer> q = new LinkedList<>();
-        q.add(start);
-        int result = 1;
+        boolean[] visited = new boolean[n + 1];
+        
+        q.add(1);
+        visited[1] = true;
+        int cnt = 1;
         
         while(!q.isEmpty()) {
-            
             int now = q.poll();
-            check[now] = 1;
             
-            for(int i = 1; i <= n; i++) {
-                if(check[i] == 0 && arr[now][i] == 1) {
-                    check[i] = 1;
-                    q.add(i);
-                    result++;
+            for(int next : list.get(now)) {
+                if(!visited[next]) {
+                    visited[next] = true;
+                    q.add(next);
+                    cnt++;
                 }
             }
-            
         }
         
-        int a = Math.max(result, n-result);
-        int b = Math.min(result, n-result);
-        
-        return a - b;
+        return cnt;
     }
-    
 }
