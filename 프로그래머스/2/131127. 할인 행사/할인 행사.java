@@ -1,30 +1,37 @@
 import java.util.*;
-
 class Solution {
     public int solution(String[] want, int[] number, String[] discount) {
         int answer = 0;
-        int lp = 0, rp = 9;
-        HashMap<String, Integer> w = new HashMap<>();
-        for(int i=0; i<want.length; i++){
-            w.put(want[i], number[i]);
+        Map<String, Integer> map = new HashMap<>();
+        for(int i = 0; i < want.length; i++) {
+            map.put(want[i], number[i]);
         }
-        while(rp < discount.length){
-            HashMap<String, Integer> d = new HashMap<>();
-            for(int i = lp; i <= rp; i++){
-                d.put(discount[i], d.getOrDefault(discount[i],0)+1);
+        
+        for(int i = 0; i < 10; i++) {
+            if(map.containsKey(discount[i])) {
+                map.put(discount[i], map.get(discount[i]) - 1);
             }
-            int cnt = 0;
-            for(String key : w.keySet()){
-                if (d.containsKey(key)){
-                    if(d.get(key) == w.get(key))
-                        cnt++;
-                }
-                else break;
-            }
-            if(cnt == w.size()) answer++;
-            lp++;
-            rp++;
         }
+        
+        answer += check(map);
+        
+        for(int i = 1; i < discount.length - 9; i++) {
+            if(map.containsKey(discount[i-1])) {
+                map.put(discount[i-1], map.get(discount[i-1]) + 1);
+            }
+            if(map.containsKey(discount[i + 9])) {
+                map.put(discount[i+9], map.get(discount[i+9]) - 1);
+            }
+            answer += check(map);
+        }
+        
         return answer;
+    }
+    
+    public int check(Map<String, Integer> map) {
+        for(String n : map.keySet()) {
+            if(map.get(n) > 0) return 0;
+        }
+        return 1;
     }
 }
